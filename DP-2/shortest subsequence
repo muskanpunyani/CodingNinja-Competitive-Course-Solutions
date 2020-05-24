@@ -1,0 +1,73 @@
+Shortest Subsequence
+Send Feedback
+Gary has two string S and V. Now Gary wants to know the length shortest subsequence in S such that it is not a subsequence in V.
+Note: input data will be such so there will always be a solution.
+Input Format :
+Line 1 : String S of length N (1 <= N <= 1000)
+Line 2 : String V of length M (1 <= M <= 1000)
+Output Format :
+Length of shortest subsequence in S such that it is not a subsequence in V
+Sample Input :
+babab
+babba
+Sample Output :
+3
+
+
+int res(char s1[],char s2[],int m,int n,int ** dp)
+{
+    if(m==0 )
+    {
+        return 1005;
+    }
+    if(n<=0)
+    {
+        return 1;    //V string is empty
+    }
+    if(dp[m][n]!=-1)
+    {
+        return dp[m][n];
+    }else{
+    int idx;
+    for(idx=0;idx<n;idx++)
+    {
+        if(s2[idx]==s1[0])
+        {
+            break;
+        }
+    }
+    if(idx==n)
+    {
+        return 1;
+    }
+   int opt1=res(s1+1,s2,m-1,n,dp);                   //not including first character
+    
+  int  opt2=res(s1+1,s2+idx+1,m-1,n-idx-1,dp) + 1;    //including first character
+    int val=min(opt1,opt2);
+        dp[m][n]=val;
+    return val;
+    }
+}
+
+int solve(string S,string V)
+{
+	// Write your code here.
+    int m=S.length();
+    int n=V.length();
+    char s1[m+1];
+     strcpy(s1, S.c_str()); 
+    char s2[n+1];
+     strcpy(s2, V.c_str()); 
+     int** dp=new int*[m+1];
+    for(int i=0;i<=m;i++)
+    {
+        dp[i]=new int[n+1];
+        for(int j=0;j<=n;j++)
+        {
+            dp[i][j]=-1;
+        }
+    }
+    int ans=res(s1,s2,m,n,dp);
+    return ans;
+  
+}
